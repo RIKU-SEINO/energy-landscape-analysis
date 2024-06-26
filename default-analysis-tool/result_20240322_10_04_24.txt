@@ -1,0 +1,30 @@
+Result
+File Name = /Users/rikuseino/Downloads/東京工業大学/energy-landscape-analysis-sandbox/stationaryTimeSeries.dat
+nodeNumber = 2
+
+h =
+
+   -0.2915
+    0.1140
+
+
+J =
+
+         0    0.0815
+    0.0815         0
+
+
+r =
+
+    1.0000
+
+LocalMinimum 1 : state 3 
+BasinGraph = (Start Node,  End Node,  Belong to Local Minima)
+
+BasinGraph =
+
+     1     3     3
+     2     1     3
+     3     3     3
+     4     3     3
+
