@@ -18,11 +18,11 @@ nPeriods_onestep = 1;
 % 投薬後の位置
 x_afterDosing = [-0.5; 0.01];
 % onestepのシミュレーションの回数
-total_cnt_onestep = 10;
+total_cnt_onestep = 1;
 
 % Topic2
 % シミュレーションのStep数（Topic2）
-nPeriods_manysteps = 5000;
+nPeriods_manysteps = 20;
 % シミュレーションを開始する位置
 x_startPos = [0; 0];
 % 分割セルの幅
@@ -84,7 +84,7 @@ p_myfunc_drawFigure('transition_vec', timeseries_simulation_manysteps, average_v
 disp("(FINISH)Topic2: 描画")
 
 % コサイン類似度
-p_myfunc_cosSim(average_vecs, average_vec_start_points)
+cosine_similarity = p_myfunc_cosSim(average_vecs, average_vec_start_points, U_sym)
 
 
 
