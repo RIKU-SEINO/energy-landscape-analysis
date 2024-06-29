@@ -99,7 +99,6 @@ function basins = p_myfunc_estimateBasin(average_vecs, cell_centers)
         end
         basin_id = basin_id + 1; % 新しいbasinを設定
     end
-    plotBasins(basins, cell_centers);
 end
 
 % 条件分岐用の関数
@@ -109,42 +108,4 @@ function result = ifelse(condition, true_value, false_value)
   else
       result = false_value;
   end
-end
-
-function plotBasins(basins, cell_centers)
-    [m, n] = size(basins);
-    unique_basins = unique(basins);
-    num_basins = length(unique_basins);
-    
-    % 色の設定
-    colormap(parula(num_basins));
-    colors = colormap;
-    
-    figure;
-    hold on;
-    
-    % 各 basin ごとにプロットとテキストの設定
-    for i = 1:num_basins
-        basin_id = unique_basins(i);
-        if basin_id == 0
-            continue; % basin_idが0の場合はスキップ
-        end
-        basin_indices = find(basins == basin_id);
-        for j = 1:length(basin_indices)
-            [row, col] = ind2sub([m, n], basin_indices(j));
-            center = cell_centers{row, col};
-            
-            % プロット
-            plot(center(1), center(2), 'o', 'MarkerSize', 0.000001, 'MarkerFaceColor', colors(i,:), 'MarkerEdgeColor', 'k');
-            
-            % テキストの追加
-            text(center(1), center(2), num2str(basin_id), 'Color', colors(i,:), 'FontSize', 10, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'baseline');
-        end
-    end
-    
-    hold off;
-    xlabel('X');
-    ylabel('Y');
-    title('Basins with Text');
-    colorbar; % カラーバーの追加
 end

@@ -1,15 +1,17 @@
-function p_myfunc_drawFigure(mode, timeseries, average_vecs, average_vec_start_points, U_sym, gridded_interval)
+function p_myfunc_drawFigure(mode, timeseries, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers)
      if mode == "trajectory"
         p_myfunc_drawTrajectoryQuiver(timeseries, U_sym)
      elseif mode == "transition_vec"
         p_myfunc_drawTransitionVecQuiver(timeseries, average_vecs, average_vec_start_points, U_sym, gridded_interval)
+     elseif mode == "basins"
+        p_myfunc_drawBasins(timeseries, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers)
      end
 end
 
 
 function p_myfunc_drawTrajectoryQuiver(timeseries, U_sym)
 
-    figure(1)
+    figure;
     syms x1 x2
     x = linspace(-0.8,0.8);
     y = linspace(-0.7,0.7);
@@ -60,7 +62,7 @@ function p_myfunc_drawTransitionVecQuiver(timeseries, average_vecs, average_vec_
 
     syms x1 x2
 
-    figure(2)
+    figure;
     x = linspace(-0.8,0.8);
     y = linspace(-0.7,0.7);
     [x,y] = meshgrid(x,y);
@@ -98,6 +100,38 @@ function p_myfunc_drawTransitionVecQuiver(timeseries, average_vecs, average_vec_
         end
     end
     grid on;
-    hold off;
-
 end
+
+function p_myfunc_drawBasins(timeseries, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers)
+    [m, n] = size(basins);
+    unique_basins = unique(basins);
+    num_basins = length(unique_basins);
+    
+    p_myfunc_drawTransitionVecQuiver(timeseries, average_vecs, average_vec_start_points, U_sym, gridded_interval)
+    hold on;
+    
+    % 各 basin ごとにプロットとテキストの設定
+    for i = 1:num_basins
+        basin_id = unique_basins(i);
+        if basin_id == 0
+            continue; % basin_idが0の場合はスキップ
+        end
+        basin_indices = find(basins == basin_id);
+        for j = 1:length(basin_indices)
+            [row, col] = ind2sub([m, n], basin_indices(j));
+            center = cell_centers{row, col};
+            
+            % プロット
+            plot(center(1), center(2), 'o', 'MarkerSize', 0.000001, 'MarkerEdgeColor', 'k');
+            
+            % テキストの追加
+            text(center(1), center(2), num2str(basin_id), 'FontSize', 10, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'baseline');
+        end
+    end
+    
+    hold off;
+    xlabel('X');
+    ylabel('Y');
+    title('Basins Classification');
+    colorbar; % カラーバーの追加
+  end

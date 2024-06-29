@@ -19,6 +19,17 @@ function result = p_myfunc_sdeSimulation(x0, nPeriods, t_interval, sigma, U_sym)
     obj = sde(drift, diffusion, 'StartState', x0);
     
     % Simulate the system
-    [result,T] = simByEuler(obj, nPeriods, 'DeltaTime', t_interval);
+    [result,~] = simByEuler(obj, nPeriods, 'DeltaTime', t_interval);
 
+    % 打ち切りする条件を設定（ここの値を超えたらそれ以降は発散するので非現実的）
+    threshold = 5;
+
+    % 行列を走査して条件を満たしたら打ち切る
+    for i = 1:size(result, 1)
+        if any(abs(result(i, :)) > threshold)
+            disp("打ち切りを行いました")
+            result = result(1:i, :);
+            break;
+        end
+    end
 end
