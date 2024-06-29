@@ -30,8 +30,12 @@ function result = p_myfunc_cosSim(average_vecs, average_vec_start_points, U_sym)
                 gradient_at_average_vec_start_point = grad_U_func(average_vec_start_point(1), average_vec_start_point(2));
                 
                 % コサイン類似度を計算
-                cos_sim = dot(average_vec, gradient_at_average_vec_start_point) / (norm(average_vec) * norm(gradient_at_average_vec_start_point));
-                
+                norm1 = norm(average_vec);
+                norm2 = norm(gradient_at_average_vec_start_point);
+                if norm1 == 0 || norm2 == 0
+                    continue;
+                end
+                cos_sim = dot(average_vec, gradient_at_average_vec_start_point) / (norm1 * norm2);
                 % 結果をセル配列に格納
                 cos_sims{i,j} = cos_sim;
                 cos_sim_sum = cos_sim_sum + cos_sim;
