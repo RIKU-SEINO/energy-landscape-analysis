@@ -18,11 +18,11 @@ nPeriods_onestep = 1;
 % 投薬後の位置
 x_afterDosing = [-0.5; 0.01];
 % onestepのシミュレーションの回数
-total_cnt_onestep = 1e3;
+total_cnt_onestep = 1;
 
 % Topic2
 % シミュレーションのStep数（Topic2）
-nPeriods_manysteps = 1e4;
+nPeriods_manysteps = 1e3;
 % シミュレーションを開始する位置
 x_startPos = [0; 0];
 % 分割セルの幅
