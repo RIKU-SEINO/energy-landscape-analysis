@@ -27,7 +27,7 @@ function result = p_myfunc_cosSim(average_vecs, average_vec_start_points, U_sym)
                 average_vec_start_point = average_vec_start_points{i,j};
                 
                 % average_vec_start_point での勾配を計算
-                gradient_at_average_vec_start_point = grad_U_func(average_vec_start_point(1), average_vec_start_point(2));
+                gradient_at_average_vec_start_point = -grad_U_func(average_vec_start_point(1), average_vec_start_point(2));
                 
                 % コサイン類似度を計算
                 norm1 = norm(average_vec);

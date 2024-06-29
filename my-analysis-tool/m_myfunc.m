@@ -18,11 +18,11 @@ nPeriods_onestep = 1;
 % 投薬後の位置
 x_afterDosing = [-0.5; 0.01];
 % onestepのシミュレーションの回数
-total_cnt_onestep = 1;
+total_cnt_onestep = 1e3;
 
 % Topic2
 % シミュレーションのStep数（Topic2）
-nPeriods_manysteps = 20;
+nPeriods_manysteps = 1e4;
 % シミュレーションを開始する位置
 x_startPos = [0; 0];
 % 分割セルの幅
@@ -73,7 +73,7 @@ disp("(FINISH)Topic2: 時系列データの出力")
 % 時系列データから遷移ベクトルデータを取得
 vecs = p_myfunc_transitionVecs(timeseries_simulation_manysteps);
 % 遷移ベクトルデータを各セルごとに収集
-[cell_vecs, cell_vec_start_points] = p_myfunc_collectTransitionVecForEachCell(timeseries_simulation_manysteps, vecs, gridded_interval);
+[cell_vecs, cell_vec_start_points, cell_centers] = p_myfunc_collectTransitionVecForEachCell(timeseries_simulation_manysteps, vecs, gridded_interval);
 % 各セルの遷移ベクトルに関する統計情報を取得
 [average_vecs, average_vec_start_points, variance_vecs, average_vec_lengths, counts] = p_myfunc_statsForEachCell(cell_vecs, cell_vec_start_points);
 
@@ -83,9 +83,13 @@ p_myfunc_drawFigure('trajectory', timeseries_simulation_manysteps, average_vecs,
 p_myfunc_drawFigure('transition_vec', timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval);
 disp("(FINISH)Topic2: 描画")
 
-% コサイン類似度
+% コサイン類似度（uとw）
 cosine_similarity = p_myfunc_cosSim(average_vecs, average_vec_start_points, U_sym)
 
+% コサイン類似度（uとv）
+
+% 分類
+p_myfunc_estimateBasin(average_vecs, cell_centers)
 
 
 
