@@ -10,12 +10,14 @@ function basins = p_myfunc_estimateBasin(average_vecs, cell_centers)
     [sorted_lengths, indices] = sort(vector_lengths(:));
     [sorted_rows, sorted_cols] = ind2sub([m, n], indices); % インデックスを行列の座標に変換
     
-    % 各セルを順に走査
+    % 離散化された各セルを順に走査
     basin_id = 1;
     for k = 1:length(sorted_lengths)
+        % 変化ベクトルの長さが短い順に、そのセルの位置をrow行col列とする
         row = sorted_rows(k);
         col = sorted_cols(k);
         
+        % すでに他のbasinに入っている場合、スキップ
         if visited(row, col) || isempty(average_vecs{row, col})
             continue;
         end
@@ -59,34 +61,40 @@ function basins = p_myfunc_estimateBasin(average_vecs, cell_centers)
                 neighbor_row = neighbors(i, 1);
                 neighbor_col = neighbors(i, 2);
                 
+                % 隣接するセルがすでに他のbasinに属していたら、そのセルは走査対象外（ここ要考察）
                 if visited(neighbor_row, neighbor_col)
                     continue;
+                % 隣接するセルに変化ベクトルがない場合、
                 elseif isempty(average_vecs{neighbor_row, neighbor_col})
+                    % それが初回（l=0）であればcurrent周りのbasinは存在しないとする。(invalid=1)
                     if l == 0
                         invalid = 1;
                         break;
                     end
+                    % それが初回でなければ（l>0）であればそのセルは走査対象外
                     continue;
                 end
                 
-                % current_vecの定義を変更
+                % 隣接するセルにおける変化ベクトル（neighbor_vec）と、隣接するセルの中心とcurrentの中心を結ぶベクトル（neighbor_ideal_vec）
                 current_center = cell_centers{current(1), current(2)};
                 neighbor_center = cell_centers{neighbor_row, neighbor_col};
-                current_vec = current_center - neighbor_center;
+                neighbor_ideal_vec = current_center - neighbor_center;
                 neighbor_vec = average_vecs{neighbor_row, neighbor_col};
                 
-                % ベクトルの内積を計算し、cosが0を超える場合、同じbasinに追加
-                if dot(current_vec, neighbor_vec) > 0
+                % ベクトルの内積を計算し、cosが0を超える場合、隣接するセルと同じbasinにcurrentを追加
+                if dot(neighbor_ideal_vec, neighbor_vec) > 0
                     if l == 0
                         targets_additional = [targets_additional; neighbor_row, neighbor_col];
                     else
                         targets = [targets; neighbor_row, neighbor_col];
                     end
+                % もしそうでなければ、初回であればcurrent周りのbasinは存在しないとする。(invalid=1)
                 elseif l == 0
                     invalid = 1;
                     break;
                 end
             end
+            % current周りのbasinは存在しない場合、currentに記録していたbasinとvisitedを初期化する
             if l == 0
                 if invalid == 1
                     basins(current(1), current(2)) = 0;
@@ -97,7 +105,7 @@ function basins = p_myfunc_estimateBasin(average_vecs, cell_centers)
             end
             l = l+1;
         end
-        basin_id = basin_id + 1; % 新しいbasinを設定
+        basin_id = basin_id + 1; % 新しいbasin id
     end
 end
 
