@@ -1,4 +1,4 @@
-function result = p_myfunc_linearizedPDF(x0, t_interval, sigma, U_sym)
+function [average, variance, pdf] = p_myfunc_linearizedPDF(x0, t_interval, sigma, U_sym)
 
     % シンボリック変数の定義
     syms x1 x2
@@ -25,8 +25,4 @@ function result = p_myfunc_linearizedPDF(x0, t_interval, sigma, U_sym)
 
     average = x0 + (eye(length(x0)) - expm(-theta*t_interval))*mu;
     variance = sigma.^2 * V * D_new * V.';
-
-    result = containers.Map();
-    result('average') = average;
-    result('variance') = variance;
-    result('pdf') = (1 / (2 * pi * sqrt(det(variance)))) * expm(-0.5 * (x - average).' * inv(variance) * (x - average));
+    pdf = (1 / (2 * pi * sqrt(det(variance)))) * expm(-0.5 * (x - average).' * inv(variance) * (x - average));

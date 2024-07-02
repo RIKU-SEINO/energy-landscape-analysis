@@ -32,10 +32,7 @@ gridded_interval = 0.05;
 %% Topic1: Estimation probability of existence in pre-disease basin
 % x_afterDosing周りに1Step時刻を進めた時の位置の確率密度関数の解析解
 disp("(START)Topic1: 確率密度関数の解析解の算出")
-pdf_info = p_myfunc_linearizedPDF(x_afterDosing, t_interval, sigma, U_sym);
-pdf_average = pdf_info('average');
-pdf_variance = pdf_info('variance');
-pdf_func = pdf_info('pdf');
+[pdf_average, pdf_variance, pdf_func] = p_myfunc_linearizedPDF(x_afterDosing, t_interval, sigma, U_sym);
 disp("(FINISH)Topic1: 確率密度関数の解析解の算出")
 
 
