@@ -75,7 +75,7 @@ vecs = p_myfunc_transitionVecs(timeseries_simulation_manysteps);
 [average_vecs, average_vec_start_points, variance_vecs, average_vec_lengths, counts] = p_myfunc_statsForEachCell(cell_vecs, cell_vec_start_points);
 
 % コサイン類似度（uとw）
-cosine_similarity = p_myfunc_cosSim(average_vecs, average_vec_start_points, U_sym)
+[cosine_similarity1, cosine_similarity2] = p_myfunc_cosSim(average_vecs, average_vec_start_points, cell_vec_start_points, U_sym)
 
 % コサイン類似度（uとv）
 
