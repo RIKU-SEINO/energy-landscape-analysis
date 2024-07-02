@@ -1,4 +1,4 @@
-function energy_values_real = p_myfunc_constructLandscape(U_sym, interval_x1, interval_x2)
+function energy_values_real = p_myfunc_constructLandscape(U_sym, interval_x1, interval_x2, energy_values)
   % シンボリック変数の定義
   syms x1 x2
 
@@ -23,6 +23,15 @@ function energy_values_real = p_myfunc_constructLandscape(U_sym, interval_x1, in
       end
   end
 
+  % セル配列を作成し、実際のエネルギー地形と構築したエネルギー地形の差異をセルごとに格納
+  energy_values_diff = cell(size(U_vals));
+  for i = 1:size(U_vals, 1)
+      for j = 1:size(U_vals, 2)
+          energy_values_diff{i, j} = energy_values_real{i, j} - energy_values{i, j};
+      end
+  end
+
+
   % 3Dプロットを作成
   figure;
   surf(X1, X2, U_vals);
@@ -32,6 +41,20 @@ function energy_values_real = p_myfunc_constructLandscape(U_sym, interval_x1, in
   xlabel('x1');
   ylabel('x2');
   zlabel('U(x1, x2)');
+
+  % 3次元バー グラフを作成してプロットする
+  figure;
+  dataArray = cellfun(@double, energy_values_diff); 
+  x = linspace(-0.8, 0.8, size(dataArray, 2));
+  y = linspace(-0.7, 0.7, size(dataArray, 1));
+  [X, Y] = meshgrid(x,y);
+  surf(X, Y, dataArray);
+  xlabel('x1');
+  ylabel('x2');
+  xlim([-0.8 0.8])
+  ylim([-0.7 0.7])
+  zlabel('P(x1,x2)');
+  title('エネルギー差の分布');
 
   % カラーバーを追加
   colorbar;
