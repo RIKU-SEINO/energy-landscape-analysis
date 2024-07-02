@@ -1,7 +1,6 @@
 %% initial settings
 clear all
 
-
 %% params settings
 syms x1 x2
 
@@ -10,7 +9,7 @@ U_sym = 200*(0.2*x1^4 + 0.4*x2^4 - 0.1*x1^2 - 0.1*x2^2);
 % シミュレーションのStep幅
 t_interval = 0.01;
 % 揺らぎの大きさ
-sigma = 0.8;
+sigma = 1.2;
 
 % Topic1
 % シミュレーションのStep数
@@ -22,7 +21,7 @@ total_cnt_onestep = 1;
 
 % Topic2
 % シミュレーションのStep数（Topic2）
-nPeriods_manysteps = 5e2;
+nPeriods_manysteps = 1e5;
 % シミュレーションを開始する位置
 x_startPos = [0; 0];
 % 分割セルの幅
@@ -74,18 +73,18 @@ vecs = p_myfunc_transitionVecs(timeseries_simulation_manysteps);
 % 各セルの遷移ベクトルに関する統計情報を取得
 [average_vecs, average_vec_start_points, variance_vecs, average_vec_lengths, counts] = p_myfunc_statsForEachCell(cell_vecs, cell_vec_start_points);
 
-% コサイン類似度（uとw）
+% コサイン類似度（uとvとwを用意し、uとv, uとwのcosine similarityを計算）
 [cosine_similarity1, cosine_similarity2] = p_myfunc_cosSim(average_vecs, average_vec_start_points, cell_vec_start_points, U_sym)
-
-% コサイン類似度（uとv）
 
 % 分類
 basins = p_myfunc_estimateBasin(average_vecs, cell_centers);
 
-% 時系列データのパスを描画
+% 描画
 disp("(START)Topic2: 描画")
-p_myfunc_drawFigure('transition_vec', timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers);
+%p_myfunc_drawFigure('transition_vec', timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers);
 p_myfunc_drawFigure("basins", timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers)
+[probability_values, energy_values] = p_myfunc_computeEnergyFromProbabilityDist(cell_vecs, sigma);
+energy_values_real = p_myfunc_constructLandscape(U_sym, size(energy_values, 2), size(energy_values, 1));
 disp("(FINISH)Topic2: 描画")
 
 
