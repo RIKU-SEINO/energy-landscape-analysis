@@ -10,7 +10,7 @@ U_sym = 200*(0.2*x1^4 + 0.4*x2^4 - 0.1*x1^2 - 0.1*x2^2);
 % シミュレーションのStep幅
 t_interval = 0.01;
 % 揺らぎの大きさ
-sigma = 1.6;
+sigma = 0.8;
 
 % Topic1
 % シミュレーションのStep数
@@ -22,7 +22,7 @@ total_cnt_onestep = 1;
 
 % Topic2
 % シミュレーションのStep数（Topic2）
-nPeriods_manysteps = 5e4;
+nPeriods_manysteps = 5e2;
 % シミュレーションを開始する位置
 x_startPos = [0; 0];
 % 分割セルの幅
