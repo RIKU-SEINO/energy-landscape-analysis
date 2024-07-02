@@ -84,7 +84,6 @@ basins = p_myfunc_estimateBasin(average_vecs, cell_centers);
 
 % 時系列データのパスを描画
 disp("(START)Topic2: 描画")
-%p_myfunc_drawFigure('trajectory', timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers);
 p_myfunc_drawFigure('transition_vec', timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers);
 p_myfunc_drawFigure("basins", timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers)
 disp("(FINISH)Topic2: 描画")
