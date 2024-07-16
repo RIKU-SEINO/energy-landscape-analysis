@@ -45,8 +45,8 @@ function energy_values_real = p_myfunc_constructLandscape(U_sym, interval_x1, in
   % 3次元バー グラフを作成してプロットする
   figure;
   dataArray = cellfun(@double, energy_values_diff); 
-  x = linspace(-0.8, 0.8, size(dataArray, 2));
-  y = linspace(-0.7, 0.7, size(dataArray, 1));
+  x = linspace(-0.8, 0.8, size(dataArray, 1));
+  y = linspace(-0.7, 0.7, size(dataArray, 2));
   [X, Y] = meshgrid(x,y);
   surf(X, Y, dataArray);
   xlabel('x1');

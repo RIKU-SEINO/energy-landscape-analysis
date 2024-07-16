@@ -7,9 +7,9 @@ syms x1 x2
 % ポテンシャル関数の定義
 U_sym = 200*(0.2*x1^4 + 0.4*x2^4 - 0.1*x1^2 - 0.1*x2^2);
 % シミュレーションのStep幅
-t_interval = 0.01;
+t_interval = 0.007;
 % 揺らぎの大きさ
-sigma = 1.2;
+sigma = 0.7;
 
 % Topic1
 % シミュレーションのStep数
@@ -21,7 +21,7 @@ total_cnt_onestep = 1;
 
 % Topic2
 % シミュレーションのStep数（Topic2）
-nPeriods_manysteps = 2e5;
+nPeriods_manysteps = 1e5;
 % シミュレーションを開始する位置
 x_startPos = [0; 0];
 % 分割セルの幅
