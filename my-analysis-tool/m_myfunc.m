@@ -5,7 +5,7 @@ clear all
 syms x1 x2
 
 % ポテンシャル関数の定義
-U_sym = 200*(0.2*x1^4 + 0.4*x2^4 - 0.1*x1^2 - 0.1*x2^2);
+U_sym = 200*(0.6*x1^4 + 0.6*x2^4 - 0.1*x1^2 - 0.1*x2^2);
 % シミュレーションのStep幅
 t_interval = 0.007;
 % 揺らぎの大きさ
@@ -79,14 +79,21 @@ vecs = p_myfunc_transitionVecs(timeseries_simulation_manysteps);
 % 分類
 basins = p_myfunc_estimateBasin(average_vecs, cell_centers);
 
+
+% グリッド
+x1 = timeseries_simulation_manysteps(:,1);
+x2 = timeseries_simulation_manysteps(:,2);
+x1_ss_min = min(x1);
+x2_ss_min = min(x2);
+x1_ss_max = max(x1);
+x2_ss_max = max(x2);
+x1_grid = x1_ss_min:gridded_interval:x1_ss_max;
+x2_grid = x2_ss_min:gridded_interval:x2_ss_max;
+
 % 描画
 disp("(START)Topic2: 描画")
 %p_myfunc_drawFigure('transition_vec', timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers);
 p_myfunc_drawFigure("basins", timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers)
-[probability_values, energy_values] = p_myfunc_computeEnergyFromProbabilityDist(cell_vecs, sigma);
-energy_values_real = p_myfunc_constructLandscape(U_sym, size(energy_values, 2), size(energy_values, 1), energy_values);
+[probability_values, energy_values] = p_myfunc_computeEnergyFromProbabilityDist(cell_vecs, sigma, x1_grid, x2_grid);
+energy_values_real = p_myfunc_constructLandscape(U_sym, size(energy_values, 2), size(energy_values, 1), energy_values, gridded_interval, x1_grid, x2_grid);
 disp("(FINISH)Topic2: 描画")
-
-
-
-
