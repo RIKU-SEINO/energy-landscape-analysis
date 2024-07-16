@@ -5,11 +5,11 @@ clear all
 syms x1 x2
 
 % ポテンシャル関数の定義
-U_sym = 200*(0.6*x1^4 + 0.6*x2^4 - 0.1*x1^2 - 0.1*x2^2);
+U_sym = 200*(0.2*x1^4 + 0.4*x2^4 - 0.1*x1^2 - 0.1*x2^2);
 % シミュレーションのStep幅
-t_interval = 0.007;
+t_interval = 0.001;
 % 揺らぎの大きさ
-sigma = 0.7;
+sigma = 2;
 
 % Topic1
 % シミュレーションのStep数
@@ -95,5 +95,5 @@ disp("(START)Topic2: 描画")
 %p_myfunc_drawFigure('transition_vec', timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers);
 p_myfunc_drawFigure("basins", timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers)
 [probability_values, energy_values] = p_myfunc_computeEnergyFromProbabilityDist(cell_vecs, sigma, x1_grid, x2_grid);
-energy_values_real = p_myfunc_constructLandscape(U_sym, size(energy_values, 2), size(energy_values, 1), energy_values, gridded_interval, x1_grid, x2_grid);
+energy_values_real = p_myfunc_constructLandscape(U_sym, size(energy_values, 2), size(energy_values, 1), energy_values,  x1_grid, x2_grid);
 disp("(FINISH)Topic2: 描画")
