@@ -7,7 +7,7 @@ syms x1 x2
 % ポテンシャル関数の定義
 U_sym = 200*(0.2*x1^4 + 0.4*x2^4 - 0.1*x1^2 - 0.1*x2^2);
 % シミュレーションのStep幅
-t_interval = 0.001;
+t_interval = 0.003;
 % 揺らぎの大きさ
 sigma = 2;
 
@@ -21,11 +21,11 @@ total_cnt_onestep = 1;
 
 % Topic2
 % シミュレーションのStep数（Topic2）
-nPeriods_manysteps = 1e5;
+nPeriods_manysteps = 2e5;
 % シミュレーションを開始する位置
 x_startPos = [0; 0];
 % 分割セルの幅
-gridded_interval = 0.02;
+gridded_interval = 0.03;
 
 
 %% Topic1: Estimation probability of existence in pre-disease basin

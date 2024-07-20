@@ -109,6 +109,9 @@ function p_myfunc_drawBasins(timeseries, average_vecs, average_vec_start_points,
     
     p_myfunc_drawTransitionVecQuiver(timeseries, average_vecs, average_vec_start_points, U_sym, gridded_interval)
     hold on;
+
+    % カラーマップの準備
+    cmap = lines(num_basins);  % num_basinsの数だけ色を生成
     
     % 各 basin ごとにプロットとテキストの設定
     for i = 1:num_basins
@@ -125,7 +128,7 @@ function p_myfunc_drawBasins(timeseries, average_vecs, average_vec_start_points,
             plot(center(1), center(2), 'o', 'MarkerSize', 0.000001, 'MarkerEdgeColor', 'k');
             
             % テキストの追加
-            text(center(1), center(2), num2str(basin_id), 'FontSize', 10, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'baseline');
+            text(center(1), center(2), num2str(basin_id), 'FontSize', 6, 'Color', cmap(i,:), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'baseline');
         end
     end
     
