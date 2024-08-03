@@ -28,8 +28,6 @@ nPeriods_manysteps = 2e5;
 x_startPos = [0; 0];
 % 分割セルの幅
 gridded_interval = 0.03;
-% infty time
-infty_time = 1e10;
 
 %% Topic1: Estimation probability of existence in pre-disease basin
 % x_disease周りの定常状態の確率分布

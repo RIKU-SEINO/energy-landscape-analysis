@@ -20,9 +20,13 @@ function [average, variance, pdf] = p_myfunc_linearizedPDF(x0, t_interval, sigma
     [V, theta_tilde] = eig(theta);
     lambda = diag(theta_tilde);
 
-    diag_elements = (1 ./ (2 .* lambda)) .* (1 - exp(-2 .* lambda .* t_interval));
+    if isinf(t_interval)
+        diag_elements = 1 ./ (2 .* lambda);
+        average = x0 + mu;
+    else
+        diag_elements = (1 ./ (2 .* lambda)) .* (1 - exp(-2 .* lambda .* t_interval));
+        average = x0 + (eye(length(x0)) - expm(-theta*t_interval))*mu;
+    end
     D_new = diag(diag_elements);
-
-    average = x0 + (eye(length(x0)) - expm(-theta*t_interval))*mu;
     variance = sigma.^2 * V * D_new * V.';
     pdf = (1 / (2 * pi * sqrt(det(variance)))) * expm(-0.5 * (x - average).' * inv(variance) * (x - average));
