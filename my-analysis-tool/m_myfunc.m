@@ -9,13 +9,15 @@ U_sym = 200*(0.2*x1^4 + 0.4*x2^4 - 0.1*x1^2 - 0.1*x2^2);
 % シミュレーションのStep幅
 t_interval = 0.003;
 % 揺らぎの大きさ
-sigma = 2;
+sigma = 2.0;
+% 病気状態の平衡点
+x_disease = [1/2, 1/sqrt(2)];
+% 投薬後の位置
+x_afterDosing = [-0.5; 0.01];
 
 % Topic1
 % シミュレーションのStep数
 nPeriods_onestep = 1;
-% 投薬後の位置
-x_afterDosing = [-0.5; 0.01];
 % onestepのシミュレーションの回数
 total_cnt_onestep = 1;
 
@@ -26,18 +28,21 @@ nPeriods_manysteps = 2e5;
 x_startPos = [0; 0];
 % 分割セルの幅
 gridded_interval = 0.03;
-
+% infty time
+infty_time = 1e10;
 
 %% Topic1: Estimation probability of existence in pre-disease basin
+% x_disease周りの定常状態の確率分布
+disp("(START)Topic1: 病気状態平衡点周りの定常状態の確率密度関数の解析解の算出")
+[pdf_average_ss, pdf_variance_ss, pdf_func_ss] = p_myfunc_linearizedPDF(x_disease, inf, sigma, U_sym);
 % x_afterDosing周りに1Step時刻を進めた時の位置の確率密度関数の解析解
-disp("(START)Topic1: 確率密度関数の解析解の算出")
+disp("(START)Topic1: 投薬後の位置に関する確率密度関数の解析解の算出")
 [pdf_average, pdf_variance, pdf_func] = p_myfunc_linearizedPDF(x_afterDosing, t_interval, sigma, U_sym);
 disp("(FINISH)Topic1: 確率密度関数の解析解の算出")
 
-
-% 1step後にbasinに属している確率（解析的な確率密度関数をbasin内でintegral2で積分）
+% 投薬後の位置をx_afterDosingと固定して、1step後にbasinに属している確率（解析的な確率密度関数をbasin内でintegral2で積分）
 disp("(START)Topic1: basinに属する確率の計算")
-stay_probability_analytic_integration = p_myfunc_stayProbabilityAnalyticIntegration(pdf_func, -Inf, 0, 0, Inf)
+stay_probability_analytic_integration = p_myfunc_stayProbabilityAnalyticIntegration(pdf_func, -Inf, 0, 0, Inf);
 disp("(FINISH)Topic1: basinに属する確率の計算")
 
 
@@ -92,6 +97,7 @@ x2_grid = x2_ss_min:gridded_interval:x2_ss_max;
 
 % 描画
 disp("(START)Topic2: 描画")
+%p_myfunc_drawFigure('trajectory', timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers);
 %p_myfunc_drawFigure('transition_vec', timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers);
 p_myfunc_drawFigure("basins", timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers)
 [probability_values, energy_values] = p_myfunc_computeEnergyFromProbabilityDist(cell_vecs, sigma, x1_grid, x2_grid);
