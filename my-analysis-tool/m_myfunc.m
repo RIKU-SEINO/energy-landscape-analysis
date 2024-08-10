@@ -23,7 +23,7 @@ total_cnt_onestep = 1;
 
 % Topic2
 % シミュレーションのStep数（Topic2）
-nPeriods_manysteps = 2e5;
+nPeriods_manysteps = 2e4;
 % シミュレーションを開始する位置
 x_startPos = [0; 0];
 % 分割セルの幅
@@ -99,5 +99,6 @@ disp("(START)Topic2: 描画")
 %p_myfunc_drawFigure('transition_vec', timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers);
 p_myfunc_drawFigure("basins", timeseries_simulation_manysteps, average_vecs, average_vec_start_points, U_sym, gridded_interval, basins, cell_centers)
 [probability_values, energy_values] = p_myfunc_computeEnergyFromProbabilityDist(cell_vecs, sigma, x1_grid, x2_grid);
-energy_values_real = p_myfunc_constructLandscape(U_sym, size(energy_values, 2), size(energy_values, 1), energy_values,  x1_grid, x2_grid);
+energy_values_real = p_myfunc_realEnergyValues(U_sym, size(energy_values, 2), size(energy_values, 1));
+p_myfunc_evaluateLandscape(energy_values, energy_values_real, x1_grid, x2_grid);
 disp("(FINISH)Topic2: 描画")
