@@ -1,4 +1,4 @@
-function basins = p_myfunc_estimateBasin(average_vecs, cell_centers)
+function basins = p_myfunc_estimateBasin(average_vecs, average_vec_start_points, cell_centers, gridded_interval)
     [m, n] = size(average_vecs);
     basins = zeros(m, n); % 各セルが属するbasinを示す行列
     visited = false(m, n); % 走査済みセルを示すマトリックス
@@ -78,11 +78,20 @@ function basins = p_myfunc_estimateBasin(average_vecs, cell_centers)
                 % 隣接するセルにおける変化ベクトル（neighbor_vec）と、隣接するセルの中心とcurrentの中心を結ぶベクトル（neighbor_ideal_vec）
                 current_center = cell_centers{current(1), current(2)};
                 neighbor_center = cell_centers{neighbor_row, neighbor_col};
-                neighbor_ideal_vec = current_center - neighbor_center;
+                neighbor_ideal_vec = (current_center - neighbor_center).';
                 neighbor_vec = average_vecs{neighbor_row, neighbor_col};
-                
+                neighbor_vec_start_point = average_vec_start_points{neighbor_row, neighbor_col};
+                neighbor_cell_x1_min = neighbor_center(1) - gridded_interval;
+                neighbor_cell_x1_max = neighbor_center(1) + gridded_interval;
+                neighbor_cell_x2_min = neighbor_center(2) - gridded_interval;
+                neighbor_cell_x2_max = neighbor_center(2) + gridded_interval;
+                vec1 = [neighbor_cell_x1_min;neighbor_cell_x2_min] - neighbor_vec_start_point;
+                vec2 = [neighbor_cell_x1_max;neighbor_cell_x2_min] - neighbor_vec_start_point;
+                vec3 = [neighbor_cell_x1_max;neighbor_cell_x2_max] - neighbor_vec_start_point;
+                vec4 = [neighbor_cell_x1_min;neighbor_cell_x2_max] - neighbor_vec_start_point;
+
                 % ベクトルの内積を計算し、cosが0を超える場合、隣接するセルと同じbasinにcurrentを追加
-                if dot(neighbor_ideal_vec, neighbor_vec) > 0
+                if isSameDirection(vec1, vec2, vec3, vec4, neighbor_vec, neighbor_ideal_vec, "cosine-argument")
                     if l == 0
                         targets_additional = [targets_additional; neighbor_row, neighbor_col];
                     else
@@ -116,4 +125,28 @@ function result = ifelse(condition, true_value, false_value)
   else
       result = false_value;
   end
+end
+
+
+function result = isSameDirection(a, b, c, d, e, f, mode)
+    if mode == "cosine-argument"
+        result = dot(e, f) > 0;
+    elseif mode == "region"
+        regionE = findRegion(a, b, c, d, e);
+        regionF = findRegion(a, b, c, d, f);
+        result = regionE == regionF;
+    end
+end
+
+% 点がどの領域にあるかを判定する関数
+function region = findRegion(a, b, c, d, vec)
+    if all(([a b] \ vec) > 0)
+        region = 1;
+    elseif all(([b c] \ vec) > 0)
+        region = 2;
+    elseif all(([c d] \ vec) > 0)
+        region = 3;
+    elseif all(([d a] \ vec) > 0)
+        region = 4;
+    end
 end

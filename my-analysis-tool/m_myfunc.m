@@ -7,9 +7,9 @@ syms x1 x2
 % ポテンシャル関数の定義
 U_sym = 200*(0.2*x1^4 + 0.4*x2^4 - 0.1*x1^2 - 0.1*x2^2);
 % シミュレーションのStep幅
-t_interval = 0.003;
+t_interval = 0.008;
 % 揺らぎの大きさ
-sigma = 2.0;
+sigma = 1.5;
 % 病気状態の平衡点
 x_disease = [1/2, 1/sqrt(2)];
 % 投薬後の位置
@@ -23,11 +23,11 @@ total_cnt_onestep = 1;
 
 % Topic2
 % シミュレーションのStep数（Topic2）
-nPeriods_manysteps = 2e4;
+nPeriods_manysteps = 1e6;
 % シミュレーションを開始する位置
 x_startPos = [0; 0];
 % 分割セルの幅
-gridded_interval = 0.03;
+gridded_interval = 0.05;
 
 %% Topic1: Estimation probability of existence in pre-disease basin
 % x_disease周りの定常状態の確率分布
@@ -55,7 +55,7 @@ for i=1:total_cnt_onestep
         stay_cnt = stay_cnt + 1;
     end
 end
-stay_probability_simulation = stay_cnt / total_cnt_onestep
+stay_probability_simulation = stay_cnt / total_cnt_onestep;
 disp("(FINISH)Topic1: basinに属する確率の算出")
 
 
@@ -77,10 +77,7 @@ vecs = p_myfunc_transitionVecs(timeseries_simulation_manysteps);
 [average_vecs, average_vec_start_points, variance_vecs, average_vec_lengths, counts] = p_myfunc_statsForEachCell(cell_vecs, cell_vec_start_points);
 
 % コサイン類似度（uとvとwを用意し、uとv, uとwのcosine similarityを計算）
-[cosine_similarity1, cosine_similarity2] = p_myfunc_cosSim(average_vecs, average_vec_start_points, cell_vec_start_points, U_sym)
-
-% 分類
-basins = p_myfunc_estimateBasin(average_vecs, cell_centers);
+[cosine_similarity1, cosine_similarity2] = p_myfunc_cosSim(average_vecs, average_vec_start_points, cell_vec_start_points, U_sym);
 
 
 % グリッド
@@ -92,6 +89,9 @@ x1_ss_max = max(x1);
 x2_ss_max = max(x2);
 x1_grid = x1_ss_min:gridded_interval:x1_ss_max;
 x2_grid = x2_ss_min:gridded_interval:x2_ss_max;
+
+% 分類
+basins = p_myfunc_estimateBasin(average_vecs, average_vec_start_points, cell_centers, gridded_interval);
 
 % 描画
 disp("(START)Topic2: 描画")
