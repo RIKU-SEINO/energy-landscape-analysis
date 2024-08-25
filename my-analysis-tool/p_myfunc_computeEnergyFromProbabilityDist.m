@@ -65,4 +65,17 @@ function [probability_values, energy_values] = p_myfunc_computeEnergyFromProbabi
   xlim([-0.8 0.8])
   ylim([-0.7 0.7])
   zlabel('E(x1,x2)');
-  title('エネルギーの分布');
+  colorbar;
+
+  U = 200*(0.2*X.^4 + 0.4*Y.^4 - 0.1*X.^2 - 0.1*Y.^2);
+
+  hold on; % 現在のプロットに追加
+  surf(X, Y, U, 'FaceAlpha', 0.5); % 半透明で U をプロット
+  xlabel('x1');
+  ylabel('x2');
+  zlabel('U');
+  xlim([-0.8 0.8])
+  ylim([-0.7 0.7])
+  title('出現確率の分布と U の3次元プロット');
+  colorbar;
+  hold off;
