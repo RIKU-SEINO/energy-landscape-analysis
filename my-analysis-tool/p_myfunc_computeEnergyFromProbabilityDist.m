@@ -21,25 +21,7 @@ function [probability_values, energy_values] = p_myfunc_computeEnergyFromProbabi
         energy_values{i, j} = -(sigma.^2)*log(probability_values{i, j}) / 2;
       else
         probability_values{i, j} = 0;
-        energy_values{i, j} = inf;
-      end
-    end
-  end
-
-  % energy_values を新しい定義に基づいて更新する
-  for i = 1:num_x1_cells
-    for j = 1:num_x2_cells
-      if ~isempty(cell_vecs{i, j})
-        % 指定された式に基づいて新しいエネルギー値を計算する
-        exp_term = 0;
-        for k = 1:num_x1_cells
-          for l = 1:num_x2_cells
-            if ~isempty(cell_vecs{k, l})
-              exp_term = exp_term + exp(-2 * energy_values{k, l} / sigma^2);
-            end
-          end
-        end
-        energy_values{i, j} = - (sigma^2) / 2 * log(probability_values{i, j}) + log(exp_term);
+        energy_values{i, j} = 0;
       end
     end
   end
@@ -64,18 +46,19 @@ function [probability_values, energy_values] = p_myfunc_computeEnergyFromProbabi
   ylabel('x2');
   xlim([-0.8 0.8])
   ylim([-0.7 0.7])
+  zlim([0,28])
   zlabel('E(x1,x2)');
   colorbar;
 
-  U = 200*(0.2*X.^4 + 0.4*Y.^4 - 0.1*X.^2 - 0.1*Y.^2);
+  % U = 200*(0.2*X.^4 + 0.4*Y.^4 - 0.1*X.^2 - 0.1*Y.^2);
 
-  hold on; % 現在のプロットに追加
-  surf(X, Y, U, 'FaceAlpha', 0.5); % 半透明で U をプロット
-  xlabel('x1');
-  ylabel('x2');
-  zlabel('U');
-  xlim([-0.8 0.8])
-  ylim([-0.7 0.7])
-  title('出現確率の分布と U の3次元プロット');
-  colorbar;
-  hold off;
+  % hold on; % 現在のプロットに追加
+  % surf(X, Y, U, 'FaceAlpha', 0.5); % 半透明で U をプロット
+  % xlabel('x1');
+  % ylabel('x2');
+  % zlabel('U');
+  % xlim([-0.8 0.8])
+  % ylim([-0.7 0.7])
+  % title('出現確率の分布と U の3次元プロット');
+  % colorbar;
+  % hold off;
